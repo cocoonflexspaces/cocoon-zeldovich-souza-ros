@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zeldovich–Souza · Run of Show</title>
+<style>
+  :root {
+    --cream:      #F5F2E8;
+    --cream-deep: #ECE7D6;
+    --cream-warm: #EFE9D7;
+    --terracotta: #F54029;
+    --teal:       #275453;
+    --ink:        #1A1A1A;
+    --ink-soft:   #4A4A4A;
+    --ink-mute:   #6B6B6B;
+    --rule:       rgba(26,26,26,0.12);
+    --rule-soft:  rgba(26,26,26,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
+  body {
+    background: var(--cream-deep);
+    color: var(--ink);
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+  a { color: inherit; text-decoration: none; }
+  a.tel-link { border-bottom: 1px dotted currentColor; }
+  a.tel-link:hover { border-bottom-style: solid; }
+
+  .sheet { max-width: 1120px; margin: 0 auto; background: var(--cream); box-shadow: 0 4px 32px rgba(0,0,0,0.10); }
+
+  /* ── TOPBAR ───────────────────────────────────────────── */
+  .topbar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 36px;
+    border-bottom: 2px solid var(--terracotta);
+    background: var(--cream);
+    gap: 10px; flex-wrap: wrap;
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .topbar-wordmark { height: 15px; width: auto; flex-shrink: 0; }
+  .topbar-divider { width: 1px; height: 16px; background: var(--rule); flex: 0 0 auto; margin: 0 6px; }
+  .topbar-title { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-soft); white-space: nowrap; }
+  .topbar-meta { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink-mute); white-space: nowrap; }
+
+  /* ── STICKY NAV ───────────────────────────────────────── */
+  .jumpnav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--ink); color: var(--cream);
+    display: flex; gap: 6px; align-items: center;
+    padding: 9px 16px; overflow-x: auto; white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .jumpnav::-webkit-scrollbar { display: none; }
+  .jumpnav a {
+    flex-shrink: 0; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 7px 12px; border-radius: 100px; background: rgba(245,242,232,0.08); color: var(--cream);
+  }
+  .jumpnav a.today { background: var(--terracotta); color: #fff; }
+
+  /* ── COVER ────────────────────────────────────────────── */
+  .cover-grid { display: grid; grid-template-columns: 1fr 1fr; }
+  .cover-left {
+    padding: 34px 38px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    border-right: 1px solid var(--rule);
+  }
+  .cover-right { padding: 34px 38px; display: flex; flex-direction: column; gap: 14px; }
+
+  .superhead { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.20em; color: var(--terracotta); margin-bottom: 12px; }
+  .cover-title { font-size: 40px; font-weight: 700; line-height: 1.02; letter-spacing: -0.03em; }
+  .cover-title span { color: var(--terracotta); }
+  .cover-subtitle { font-size: 12px; font-weight: 500; letter-spacing: -0.01em; color: var(--ink-soft); margin-top: 12px; }
+  .cover-divider { width: 36px; height: 2px; background: var(--terracotta); margin: 18px 0; }
+
+  .stat-row { display: flex; gap: 20px; margin-top: 14px; flex-wrap: wrap; }
+  .stat-item .num { font-size: 19px; font-weight: 700; letter-spacing: -0.02em; color: var(--terracotta); line-height: 1; white-space: nowrap; }
+  .stat-item .lbl { font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ink-mute); margin-top: 3px; }
+
+  .spec-grid { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--rule); }
+  .spec-item { padding: 9px 13px; border-bottom: 1px solid var(--rule-soft); }
+  .spec-item:nth-child(odd) { border-right: 1px solid var(--rule-soft); }
+  .spec-item.full { grid-column: 1 / 3; border-right: none; }
+  .spec-item:last-child, .spec-item:nth-last-child(2):not(.full) { border-bottom: none; }
+  .spec-label { font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; color: var(--ink-mute); margin-bottom: 3px; }
+  .spec-value { font-size: 11.5px; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+
+  .features-head { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.18em; color: var(--terracotta); margin-bottom: 7px; padding-bottom: 4px; border-bottom: 1px solid rgba(245,64,41,0.15); }
+  .features-list { list-style: none; display: grid; gap: 3px; }
+  .features-list li { font-size: 9px; color: var(--ink-soft); padding-left: 12px; position: relative; line-height: 1.4; }
+  .features-list li::before { content: "·"; position: absolute; left: 0; color: var(--terracotta); font-weight: 700; font-size: 13px; line-height: 1; }
+
+  .cover-footer { border-top: 1px solid var(--rule); padding-top: 11px; margin-top: 12px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover-footer-note { font-size: 8px; color: var(--ink-mute); line-height: 1.6; }
+  .cover-footer-contact { font-size: 8px; color: var(--ink-soft); text-align: right; line-height: 1.6; }
+  .cover-footer-contact strong { color: var(--ink); font-weight: 600; }
+
+  .legend-row { display: flex; gap: 18px; align-items: center; margin-top: 4px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-soft); }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .legend-swatch.cocoon { background: var(--terracotta); }
+  .legend-swatch.vendor { background: var(--teal); }
+
+  /* ── DAY / TIMELINE ───────────────────────────────────── */
+  .day-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 36px; background: var(--cream-warm); border-bottom: 1px solid var(--rule);
+    gap: 10px; flex-wrap: wrap;
+  }
+  .dh-left { display: flex; align-items: baseline; gap: 14px; }
+  .dh-badge { width: 40px; height: 40px; background: var(--terracotta); color: #fff; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .dh-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; color: var(--ink); line-height: 1.1; }
+  .dh-sub { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: var(--ink-mute); margin-top: 2px; }
+  .dh-right { text-align: right; }
+  .dh-access { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--terracotta); margin-bottom: 2px; }
+  .dh-access-val { font-size: 12px; font-weight: 700; color: var(--ink); }
+
+  .day-body { padding: 14px 36px 18px; }
+  .ros-table { width: 100%; border-collapse: collapse; }
+  .ros-table thead th {
+    text-align: left; font-size: 7px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em;
+    color: var(--ink-mute); padding: 5px 8px; border-bottom: 1px solid var(--rule);
+  }
+  .ros-table tbody td { padding: 6px 8px; border-bottom: 1px solid var(--rule-soft); vertical-align: top; }
+  .ros-table tbody tr:last-child td { border-bottom: none; }
+  .rt-time { font-size: 8.6px; font-weight: 700; color: var(--ink); white-space: nowrap; width: 90px; }
+  .rt-track { width: 96px; }
+  .track-pill { display: inline-flex; align-items: center; justify-content: center; width: 84px; font-size: 6.6px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 3px 4px; border-radius: 100px; white-space: nowrap; text-align: center; }
+  .track-pill.cocoon { background: rgba(245,64,41,0.14); color: var(--terracotta); }
+  .track-pill.vendor { background: rgba(39,84,83,0.14); color: var(--teal); }
+  .rt-item { font-size: 8.8px; color: var(--ink); line-height: 1.4; }
+  .rt-item .rt-note { display: block; color: var(--ink-mute); font-size: 7.9px; margin-top: 2px; }
+  .rt-item .flag { color: var(--terracotta); font-weight: 700; }
+  .rt-owner { font-size: 7.8px; color: var(--ink-soft); width: 130px; text-align: right; white-space: nowrap; }
+  .row-highlight td { background: rgba(245,64,41,0.05); }
+
+  .day-footnote { margin: 10px 0 0; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 7.8px; color: var(--ink-mute); line-height: 1.5; }
+  .day-footnote strong { color: var(--terracotta); }
+
+  /* ── WALKTHROUGH CHECKLIST ────────────────────────────── */
+  .walk-box { background: var(--cream-warm); border-left: 3px solid var(--terracotta); padding: 12px 16px; margin-bottom: 14px; }
+  .walk-head { font-size: 8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--terracotta); margin-bottom: 3px; }
+  .walk-sub { font-size: 8.4px; color: var(--ink-soft); margin-bottom: 8px; line-height: 1.45; }
+  .walk-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
+  .walk-item { display: flex; align-items: flex-start; gap: 7px; font-size: 8.6px; color: var(--ink); line-height: 1.4; padding: 3px 0; }
+  .walk-check { flex-shrink: 0; width: 12px; height: 12px; border: 1.5px solid var(--terracotta); border-radius: 3px; margin-top: 1px; }
+
+  /* ── TEAM ─────────────────────────────────────────────── */
+  .team-body { padding: 18px 36px 20px; display: flex; flex-direction: column; gap: 14px; }
+  .team-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .team-col-head { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--terracotta); padding-bottom: 5px; border-bottom: 1px solid rgba(245,64,41,0.18); margin-bottom: 6px; }
+  .person-row { padding: 7px 0; border-bottom: 1px solid var(--rule-soft); }
+  .person-row:last-child { border-bottom: none; }
+  .p-name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .p-name { font-size: 10px; font-weight: 700; color: var(--ink); letter-spacing: -0.005em; }
+  .p-phone { font-size: 8.6px; font-weight: 600; color: var(--terracotta); white-space: nowrap; }
+  .p-phone.vendor { color: var(--teal); }
+  .p-phone.tbd { color: var(--ink-mute); font-weight: 500; }
+  .p-role { font-size: 8.2px; color: var(--ink-mute); margin-top: 1px; }
+  .p-note { font-size: 7.9px; color: var(--ink-soft); margin-top: 2px; line-height: 1.4; }
+  .vendor-row { padding: 6px 0; border-bottom: 1px solid var(--rule-soft); display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+  .vendor-row:last-child { border-bottom: none; }
+  .v-name { font-size: 9px; font-weight: 600; color: var(--ink); }
+  .v-role { font-size: 7.7px; color: var(--ink-mute); }
+  .v-phone { font-size: 7.9px; font-weight: 600; color: var(--ink-soft); text-align: right; white-space: nowrap; flex-shrink: 0; }
+  .v-phone.tbd { color: var(--ink-mute); font-style: italic; font-weight: 400; }
+
+  /* ── NOTES / OPEN ITEMS ───────────────────────────────── */
+  .items-body { padding: 18px 36px 20px; display: flex; flex-direction: column; gap: 12px; }
+  .items-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .items-col { display: flex; flex-direction: column; gap: 10px; }
+  .items-group-head { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--terracotta); padding-bottom: 5px; border-bottom: 1px solid rgba(245,64,41,0.18); }
+  .item-row { display: flex; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--rule-soft); }
+  .item-row:last-child { border-bottom: none; }
+  .item-status { flex-shrink: 0; width: 66px; }
+  .pill { display: inline-block; font-size: 6.8px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; padding: 2.5px 6px; border-radius: 100px; white-space: nowrap; }
+  .pill.pending { background: rgba(245,64,41,0.12); color: var(--terracotta); }
+  .pill.progress { background: rgba(39,84,83,0.12); color: var(--teal); }
+  .pill.done { background: rgba(39,84,83,0.85); color: #fff; }
+  .item-text { font-size: 8.6px; color: var(--ink-soft); line-height: 1.42; }
+  .item-text strong { color: var(--ink); font-weight: 600; }
+  .note-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .note-list li { font-size: 8.8px; color: var(--ink-soft); padding-left: 12px; position: relative; line-height: 1.42; }
+  .note-list li::before { content: "–"; position: absolute; left: 0; color: var(--terracotta); font-weight: 700; }
+  .note-list li strong { color: var(--ink); }
+
+  /* Footer */
+  .plan-footer {
+    padding: 9px 36px;
+    border-top: 1px solid var(--rule);
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--cream); gap: 8px; flex-wrap: wrap;
+  }
+  .plan-footer-left  { font-size: 7.5px; color: var(--ink-mute); font-weight: 600; text-transform: uppercase; letter-spacing: 0.13em; }
+  .plan-footer-center{ font-size: 7.5px; color: var(--terracotta); font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em; }
+  .plan-footer-right { font-size: 7.5px; color: var(--ink-mute); font-weight: 600; text-transform: uppercase; letter-spacing: 0.13em; }
+
+  .section-break { height: 10px; background: var(--cream-deep); }
+
+  /* ══════════════════════════════════════════════════════
+     MOBILE
+  ══════════════════════════════════════════════════════ */
+  @media screen and (max-width: 880px) {
+    body { font-size: 15px; }
+    .sheet { box-shadow: none; }
+
+    .topbar { padding: 12px 16px; }
+    .topbar-title { display: none; }
+    .topbar-divider { display: none; }
+    .topbar-meta { font-size: 10px; }
+    .jumpnav { padding: 10px 12px; }
+    .jumpnav a { font-size: 12px; padding: 8px 13px; }
+
+    .cover-grid { grid-template-columns: 1fr; }
+    .cover-left { border-right: none; border-bottom: 1px solid var(--rule); padding: 22px 18px; }
+    .cover-right { padding: 22px 18px; }
+    .cover-title { font-size: 32px; }
+    .cover-subtitle { font-size: 13px; }
+    .stat-row { gap: 16px 22px; }
+    .stat-item .num { font-size: 20px; }
+    .stat-item .lbl { font-size: 9px; }
+    .spec-grid { grid-template-columns: 1fr; }
+    .spec-item:nth-child(odd) { border-right: none; }
+    .spec-item.full { grid-column: 1; }
+    .spec-value { font-size: 13px; }
+    .features-list li { font-size: 12px; }
+    .cover-footer { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .cover-footer-contact { text-align: left; }
+    .cover-footer-note, .cover-footer-contact { font-size: 11px; }
+    .legend-item { font-size: 11px; }
+
+    .day-header { padding: 14px 16px; }
+    .dh-title { font-size: 18px; }
+    .dh-access-val { font-size: 13px; }
+
+    .day-body { padding: 10px 16px 16px; }
+    .ros-table, .ros-table tbody, .ros-table tr, .ros-table td { display: block; width: 100%; }
+    .ros-table thead { display: none; }
+    .ros-table tr {
+      border: 1px solid var(--rule); border-radius: 6px; margin-bottom: 9px;
+      padding: 10px 12px; background: var(--cream);
+    }
+    .ros-table tr.row-highlight { background: rgba(245,64,41,0.06); border-color: rgba(245,64,41,0.3); }
+    .ros-table td { padding: 2px 0; border-bottom: none; }
+    .rt-time { font-size: 14px; display: inline-block; margin-right: 8px; }
+    .rt-track { width: auto; display: inline-block; margin-bottom: 4px; }
+    .track-pill { width: auto; padding: 4px 10px; font-size: 10px; }
+    .rt-item { font-size: 13.5px; padding-top: 3px; }
+    .rt-item .rt-note { font-size: 12px; }
+    .rt-owner { width: auto; text-align: left; font-size: 12px; margin-top: 4px; color: var(--ink-mute); }
+    .rt-owner::before { content: "→ "; color: var(--terracotta); font-weight: 700; }
+    .day-footnote { font-size: 11px; }
+    .walk-grid { grid-template-columns: 1fr; gap: 6px; }
+    .walk-item { font-size: 13px; }
+    .walk-sub { font-size: 12px; }
+
+    .team-body { padding: 16px 16px 18px; }
+    .team-cols { grid-template-columns: 1fr; gap: 14px; }
+    .p-name, .v-name { font-size: 13.5px; }
+    .p-role, .v-role { font-size: 11px; }
+    .p-phone, .v-phone { font-size: 12px; }
+    .p-note { font-size: 11px; }
+
+    .items-body { padding: 16px 16px 18px; }
+    .items-cols { grid-template-columns: 1fr; gap: 8px; }
+    .item-row { gap: 12px; padding: 9px 0; }
+    .item-status { width: 76px; }
+    .pill { font-size: 9px; padding: 4px 8px; }
+    .item-text { font-size: 12.5px; }
+    .note-list li { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="topbar">
+    <div class="topbar-brand">
+      <svg class="topbar-wordmark" viewBox="0 725 672 112" xmlns="http://www.w3.org/2000/svg" aria-label="cocoon">
+        <path d="M0.906738 782.025V781.682C0.906738 753.895 22.1386 731.049 51.9316 731.049C66.6569 731.049 76.9792 735.06 85.149 741.958C86.9591 743.426 89.503 746.655 89.503 751.4C89.503 758.298 83.8771 763.728 76.9792 763.728C73.3591 763.728 70.6194 762.26 69.005 760.989C64.1129 757.173 59.0251 754.824 51.7848 754.824C37.989 754.824 28.2048 767.006 28.2048 781.34V781.682C28.2048 796.554 37.8423 808.54 52.91 808.54C60.1504 808.54 65.7763 805.996 71.0598 801.838C72.5274 800.761 75.218 799.294 78.4958 799.294C85.0512 799.294 90.0901 804.577 90.0901 811.084C90.0901 814.704 88.4757 817.639 86.0786 819.792C77.9087 827.228 67.5863 832.315 51.5891 832.315C22.3342 832.267 0.906738 809.763 0.906738 782.025Z" fill="black"/>
+        <path d="M101.831 782.025V781.682C101.831 753.748 124.335 731.049 154.666 731.049C184.801 731.049 207.11 753.357 207.11 781.34V781.682C207.11 809.616 184.606 832.315 154.275 832.315C124.139 832.267 101.831 809.959 101.831 782.025ZM179.86 782.025V781.682C179.86 767.348 169.538 754.824 154.275 754.824C138.473 754.824 129.031 767.006 129.031 781.34V781.682C129.031 796.016 139.354 808.54 154.617 808.54C170.419 808.491 179.86 796.358 179.86 782.025Z" fill="black"/>
+        <path d="M222.373 782.025V781.682C222.373 753.895 243.604 731.049 273.397 731.049C288.122 731.049 298.445 735.06 306.615 741.958C308.425 743.426 310.969 746.655 310.969 751.4C310.969 758.298 305.343 763.728 298.445 763.728C294.825 763.728 292.085 762.26 290.471 760.989C285.579 757.173 280.491 754.824 273.25 754.824C259.455 754.824 249.671 767.006 249.671 781.34V781.682C249.671 796.554 259.308 808.54 274.376 808.54C281.616 808.54 287.242 805.996 292.525 801.838C293.993 800.761 296.684 799.294 299.961 799.294C306.517 799.294 311.556 804.577 311.556 811.084C311.556 814.704 309.941 817.639 307.544 819.792C299.374 827.228 289.052 832.315 273.055 832.315C243.751 832.267 222.373 809.763 222.373 782.025Z" fill="black"/>
+        <path d="M323.248 782.025V781.682C323.248 753.748 345.751 731.049 376.082 731.049C406.218 731.049 428.526 753.357 428.526 781.34V781.682C428.526 809.616 406.022 832.316 375.691 832.316C345.605 832.267 323.248 809.959 323.248 782.025ZM401.326 782.025V781.682C401.326 767.348 390.954 754.824 375.74 754.824C359.938 754.824 350.497 767.006 350.497 781.34V781.682C350.497 796.016 360.819 808.54 376.082 808.54C391.884 808.491 401.326 796.359 401.326 782.025Z" fill="black"/>
+        <path d="M443.789 782.025V781.682C443.789 753.748 466.293 731.049 496.624 731.049C526.76 731.049 549.068 753.357 549.068 781.34V781.682C549.068 809.616 526.564 832.315 496.233 832.315C466.097 832.267 443.789 809.959 443.789 782.025ZM521.867 782.025V781.682C521.867 767.348 511.545 754.824 496.282 754.824C480.48 754.824 471.038 767.006 471.038 781.34V781.682C471.038 796.016 481.361 808.54 496.624 808.54C512.426 808.491 521.867 796.358 521.867 782.025Z" fill="black"/>
+        <path d="M617.948 754.776C602.685 754.776 592.362 767.299 592.362 781.633V781.976V783.443V819.743C592.362 827.375 586.541 833.539 578.909 833.539C571.278 833.539 565.114 827.375 565.114 819.743V783.443V781.633V781.291C565.114 753.357 587.421 731 617.557 731C647.692 731 670 753.308 670 781.291V781.633V783.443V819.743C670 827.375 663.836 833.539 656.204 833.539C648.573 833.539 642.751 827.375 642.751 819.743V783.443V781.976V781.633C642.751 767.299 632.429 754.776 617.165 754.776" fill="black"/>
+      </svg>
+      <div class="topbar-divider"></div>
+      <div class="topbar-title">Casa Duende · 170 Eldridge Street, New York, NY</div>
+    </div>
+    <div class="topbar-meta">Run of Show</div>
+  </div>
+
+  <nav class="jumpnav">
+    <a href="#cover">Cover</a>
+    <a href="#timeline" class="today">Sep 5 · Wedding</a>
+    <a href="#team">Team &amp; Contacts</a>
+    <a href="#notes">Notes &amp; Open Items</a>
+  </nav>
+
+  <section id="cover" class="cover-grid">
+    <div class="cover-left">
+      <div>
+        <div class="superhead">Cocoon Flex Spaces · Casa Duende</div>
+        <h1 class="cover-title">Zeldovich–Souza<br><span>Wedding.</span></h1>
+        <div class="cover-subtitle">Run of Show — Wedding Reception</div>
+        <div class="cover-divider"></div>
+        <div class="stat-row">
+          <div class="stat-item"><div class="num">Sep 5</div><div class="lbl">Event Date</div></div>
+          <div class="stat-item"><div class="num">70</div><div class="lbl">Guest Headcount</div></div>
+          <div class="stat-item"><div class="num">2PM–1AM</div><div class="lbl">Client Access</div></div>
+          <div class="stat-item"><div class="num">1PM–2AM</div><div class="lbl">Casa Manager Window</div></div>
+        </div>
+      </div>
+      <div class="legend-row">
+        <div class="legend-item"><span class="legend-swatch cocoon"></span>Cocoon Actions</div>
+        <div class="legend-item"><span class="legend-swatch vendor"></span>Client / Vendor</div>
+      </div>
+      <div class="cover-footer">
+        <div class="cover-footer-note">One combined timeline merging the client's submitted run of show with Cocoon's<br>on-site actions. Each line is tagged by owner. See Notes &amp; Open Items for anything<br>still pending confirmation.</div>
+        <div class="cover-footer-contact">
+          <strong>Cocoon Flex Spaces</strong><br>
+          eduard@cocoonflexspaces.com<br>
+          cocoonflexspaces.com
+        </div>
+      </div>
+    </div>
+    <div class="cover-right">
+      <div class="spec-grid">
+        <div class="spec-item"><div class="spec-label">Venue</div><div class="spec-value">Casa Duende</div></div>
+        <div class="spec-item"><div class="spec-label">Address</div><div class="spec-value">170 Eldridge St, NYC</div></div>
+        <div class="spec-item"><div class="spec-label">Client</div><div class="spec-value">Daniel Zeldovich</div></div>
+        <div class="spec-item"><div class="spec-label">Event Type</div><div class="spec-value">Wedding Reception</div></div>
+        <div class="spec-item"><div class="spec-label">Check-in</div><div class="spec-value">2:00 PM</div></div>
+        <div class="spec-item"><div class="spec-label">Hard Out</div><div class="spec-value">1:00 AM</div></div>
+        <div class="spec-item full"><div class="spec-label">Cocoon Lead / Contract</div><div class="spec-value">Eduard Monteagudo — eduard@cocoonflexspaces.com</div></div>
+      </div>
+      <div>
+        <div class="features-head">How to Read This Document</div>
+        <ul class="features-list">
+          <li>One timeline combining the client's own submitted ROS with Cocoon's on-site actions</li>
+          <li>Each line is tagged by owner — Cocoon Actions or Client / Vendor</li>
+          <li>Team &amp; Contacts page lists every vendor and their phone number</li>
+          <li>Notes &amp; Open Items flags anything still pending confirmation before tomorrow</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-break"></div>
+
+  <section id="timeline">
+    <div class="day-header">
+      <div class="dh-left">
+        <div class="dh-badge">5</div>
+        <div>
+          <div class="dh-title">Saturday, September 5 — Wedding Reception</div>
+          <div class="dh-sub">Casa Duende · 170 Eldridge Street</div>
+        </div>
+      </div>
+      <div class="dh-right">
+        <div class="dh-access">Client Access</div>
+        <div class="dh-access-val">2:00 PM – 1:00 AM</div>
+      </div>
+    </div>
+    <div class="day-body">
+      <div class="walk-box">
+        <div class="walk-head">Casa Manager Walkthrough — Verify Before Load-In</div>
+        <div class="walk-sub">Per Cocoon's message to the property this week, ahead of both this weekend's weddings. Leroi to walk the space and sign off on each before 2:00 PM.</div>
+        <div class="walk-grid">
+          <div class="walk-item"><span class="walk-check"></span>Space smell-free (no weed / cigarettes) &amp; ventilated — there's a Friday-night-into-Saturday booking ahead of load-in.</div>
+          <div class="walk-item"><span class="walk-check"></span>Big wooden table back in its original spot next to the couches.</div>
+          <div class="walk-item"><span class="walk-check"></span>Armchairs in the back removed from the floor.</div>
+          <div class="walk-item"><span class="walk-check"></span>Chairs behind the wooden table removed.</div>
+          <div class="walk-item"><span class="walk-check"></span>Entire space clear of personal / random objects and equipment.</div>
+          <div class="walk-item"><span class="walk-check"></span>Two front rooms held available for the wedding.</div>
+          <div class="walk-item"><span class="walk-check"></span>Garage — a portion available for storage.</div>
+          <div class="walk-item"><span class="walk-check"></span>Rooftop shades up, set to proper height.</div>
+          <div class="walk-item"><span class="walk-check"></span>Waterfall on.</div>
+          <div class="walk-item"><span class="walk-check"></span>Fridge / refrigerator empty.</div>
+          <div class="walk-item"><span class="walk-check"></span>Projector set up and working.</div>
+          <div class="walk-item"><span class="walk-check"></span>In-house CDJ mixers &amp; mics staged — usage fee confirmed paid (Gordon McKemie).</div>
+        </div>
+      </div>
+      <table class="ros-table">
+        <thead><tr><th>Time</th><th>Owner</th><th>Item</th><th>Detail</th></tr></thead>
+        <tbody>
+
+          <tr>
+            <td class="rt-time">1:00 PM</td>
+            <td class="rt-track"><span class="track-pill cocoon">Cocoon</span></td>
+            <td class="rt-item">Casa Manager on site ahead of client access; walks the space against the checklist above before opening to vendors.<span class="rt-note">There's a booking the night before — confirm smell-free/ventilated and cleared of prior event's items.</span></td>
+            <td class="rt-owner">Leroi Richardson</td>
+          </tr>
+          <tr>
+            <td class="rt-time">2:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Load-in starts; teams arrive. Monica begins decor setup.</td>
+            <td class="rt-owner">Monica Leo</td>
+          </tr>
+          <tr>
+            <td class="rt-time">2:00–4:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Rental furniture delivery.</td>
+            <td class="rt-owner">Broadway Party Rentals</td>
+          </tr>
+          <tr>
+            <td class="rt-time">4:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Catering arrives.</td>
+            <td class="rt-owner">Bartleby &amp; Sage</td>
+          </tr>
+          <tr>
+            <td class="rt-time">4:00–5:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Food delivery for third station.<span class="rt-note">Dropped off by Taci's Beyti; Bartleby &amp; Sage handling on-site.</span></td>
+            <td class="rt-owner">Taci's Beyti</td>
+          </tr>
+          <tr>
+            <td class="rt-time">5:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Musicians / band arrive — load-in, setup, soundcheck.</td>
+            <td class="rt-owner">Brazilian Arts</td>
+          </tr>
+          <tr>
+            <td class="rt-time">6:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Party starts.</td>
+            <td class="rt-owner">All</td>
+          </tr>
+          <tr>
+            <td class="rt-time">6:00–7:30 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Brazilian band / Bossa Nova set.</td>
+            <td class="rt-owner">Barbara &amp; Paolo</td>
+          </tr>
+          <tr>
+            <td class="rt-time">6:00–7:30 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Passed food + burrata station.</td>
+            <td class="rt-owner">Bartleby &amp; Sage</td>
+          </tr>
+          <tr class="row-highlight">
+            <td class="rt-time">~6:30 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Cartoonist.<span class="rt-note flag">Exact time as printed on the client's PDF — worth a quick confirm.</span></td>
+            <td class="rt-owner">TBD</td>
+          </tr>
+          <tr>
+            <td class="rt-time">7:30 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Band ends; guests head up to the roof (~5 min).</td>
+            <td class="rt-owner">All</td>
+          </tr>
+          <tr class="row-highlight">
+            <td class="rt-time">7:30–10:30 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Event photographer on site.<span class="rt-note flag">Window as printed on the client's PDF — worth a quick confirm.</span></td>
+            <td class="rt-owner">Iyzi Lester</td>
+          </tr>
+          <tr class="row-highlight">
+            <td class="rt-time">7:35–7:45 PM</td>
+            <td class="rt-track"><span class="track-pill cocoon">Cocoon</span></td>
+            <td class="rt-item">Rooftop ceremony — no amplified sound.<span class="rt-note">Casa Duende helps set up a small speaker/mic upstairs. Mariana + Danny providing the small speaker + mic.</span></td>
+            <td class="rt-owner">Leroi · Mariana · Danny</td>
+          </tr>
+          <tr>
+            <td class="rt-time">7:45–9:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Light disco / house music, phone via Spotify.<span class="rt-note flag">Confirm phone connects to the venue sound system beforehand.</span></td>
+            <td class="rt-owner">Client</td>
+          </tr>
+          <tr>
+            <td class="rt-time">7:45 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Two food stations open — seafood and Turkish.</td>
+            <td class="rt-owner">Bartleby &amp; Sage</td>
+          </tr>
+          <tr>
+            <td class="rt-time">9:00 PM – close</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">DJ set.</td>
+            <td class="rt-owner">DJ Brunna</td>
+          </tr>
+          <tr>
+            <td class="rt-time">9:00 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Food service ends; dessert starts.</td>
+            <td class="rt-owner">Bartleby &amp; Sage</td>
+          </tr>
+          <tr>
+            <td class="rt-time">11:30 PM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Music stops; teams begin clearing up.</td>
+            <td class="rt-owner">All</td>
+          </tr>
+          <tr>
+            <td class="rt-time">11:30 PM–12:00 AM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Guests leaving.</td>
+            <td class="rt-owner">All</td>
+          </tr>
+          <tr>
+            <td class="rt-time">12:00 AM</td>
+            <td class="rt-track"><span class="track-pill vendor">Vendor</span></td>
+            <td class="rt-item">Rental pickup / load-out.</td>
+            <td class="rt-owner">Broadway Party Rentals</td>
+          </tr>
+          <tr>
+            <td class="rt-time">12:00–1:00 AM</td>
+            <td class="rt-track"><span class="track-pill vendor">Client</span></td>
+            <td class="rt-item">Teams wrap out / load out.</td>
+            <td class="rt-owner">All</td>
+          </tr>
+          <tr>
+            <td class="rt-time">1:00 AM</td>
+            <td class="rt-track"><span class="track-pill cocoon">Cocoon</span></td>
+            <td class="rt-item">Hard out — all teams out of venue.</td>
+            <td class="rt-owner">Leroi Richardson</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="day-footnote"><strong>Source —</strong> Timeline merges the client's own submitted "MAZDAZ – Run of Show" PDF (via Zendesk ticket #58098) with Cocoon's Casa Duende Welcome Kit and booking record. Rows in a highlighted panel are worth a quick client confirm before tomorrow — see Notes &amp; Open Items.</div>
+    </div>
+  </section>
+
+  <div class="section-break"></div>
+
+  <section id="team" class="team-body">
+    <div class="items-group-head" style="margin-bottom:2px;">Production Team &amp; Key Contacts</div>
+    <div class="team-cols">
+      <div class="team-col">
+        <div class="team-col-head">Cocoon Flex Spaces</div>
+        <div class="person-row">
+          <div class="p-name-row"><span class="p-name">Eduard Monteagudo</span><a class="p-phone tel-link" href="mailto:eduard@cocoonflexspaces.com">Email</a></div>
+          <div class="p-role">Founder — scope, cost &amp; contractual lead</div>
+        </div>
+        <div class="person-row">
+          <div class="p-name-row"><span class="p-name">Leroi Richardson</span><a class="p-phone tel-link" href="tel:+13473208230">347-320-8230</a></div>
+          <div class="p-role">Casa Manager, Casa Duende — on site day of</div>
+        </div>
+      </div>
+      <div class="team-col">
+        <div class="team-col-head">Client</div>
+        <div class="person-row">
+          <div class="p-name-row"><span class="p-name">Daniel Zeldovich</span><a class="p-phone tel-link" href="tel:+19179228280">917-922-8280</a></div>
+          <div class="p-role">Client — primary point of contact</div>
+        </div>
+      </div>
+      <div class="team-col">
+        <div class="team-col-head">Casa Duende Managers</div>
+        <div class="person-row">
+          <div class="p-name-row"><span class="p-name">Leroi Richardson &amp; Xavier Ames</span><a class="p-phone tel-link vendor" href="tel:+13473208230">347-320-8230</a></div>
+          <div class="p-role">On-site coverage, per client's ROS</div>
+        </div>
+      </div>
+    </div>
+    <div class="team-cols" style="margin-top:6px;">
+      <div class="team-col">
+        <div class="team-col-head">Production Vendors</div>
+        <div class="vendor-row"><span class="v-name">Monica Leo</span><span class="v-phone">305-898-2553</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">Event Designer / Decor</span></div>
+        <div class="vendor-row"><span class="v-name">Bartleby &amp; Sage — "Captain" Vlada</span><span class="v-phone">347-794-3256</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">Catering — rachael@bartlebyandsage.com</span></div>
+      </div>
+      <div class="team-col">
+        <div class="team-col-head">&nbsp;</div>
+        <div class="vendor-row"><span class="v-name">Iyzi Lester</span><span class="v-phone">210-216-6339</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">Event Photographer</span></div>
+        <div class="vendor-row"><span class="v-name">Brazilian Arts — Barbara &amp; Paolo</span><span class="v-phone tbd">TBD</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">Band — singer &amp; pianist, Bossa Nova set</span></div>
+      </div>
+      <div class="team-col">
+        <div class="team-col-head">&nbsp;</div>
+        <div class="vendor-row"><span class="v-name">DJ Brunna</span><span class="v-phone tbd">TBD</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">DJ, 9:00 PM – close</span></div>
+        <div class="vendor-row"><span class="v-name">Broadway Party Rentals</span><span class="v-phone tbd">TBD</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">Furniture rental delivery / pickup</span></div>
+        <div class="vendor-row"><span class="v-name">Taci's Beyti</span><span class="v-phone tbd">TBD</span></div>
+        <div class="vendor-row" style="border:none; padding-top:0; margin-top:-4px;"><span class="v-role">Third food station</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-break"></div>
+
+  <section id="notes" class="items-body">
+    <div class="items-group-head" style="border:none; padding:0;">Setup Notes &amp; Open Items</div>
+    <div class="items-cols">
+      <div class="items-col">
+        <div class="items-group-head">Site &amp; Setup Notes</div>
+        <ul class="note-list">
+          <li><strong>Layout —</strong> per the client's walkthrough video, the big wooden table goes back next to the couches; back armchairs and the chairs behind the wooden table come off the floor — matches this being a dance-floor-forward wedding, per Cocoon's note to the property.</li>
+          <li><strong>Rooftop sound —</strong> no amplified sound during the 7:35–7:45 PM ceremony; light disco/house via phone (Spotify) only from 7:45 PM on.</li>
+          <li><strong>Ceremony mic —</strong> Cocoon helps set up a small speaker + mic upstairs; Mariana + Danny are providing the unit.</li>
+          <li><strong>Sound system —</strong> confirm the client's phone connects to the venue's house system before 7:45 PM.</li>
+          <li><strong>In-house CDJ &amp; mics —</strong> this wedding is using the venue's in-house CDJ mixers and microphones; usage fee confirmed paid with Gordon McKemie.</li>
+          <li><strong>Rooftop —</strong> shades up at proper height; waterfall on for the event.</li>
+          <li><strong>Front rooms —</strong> both held available for this wedding.</li>
+          <li><strong>Garage —</strong> a portion available for vendor storage.</li>
+          <li><strong>Fridge —</strong> empty ahead of caterer load-in; projector set up and available.</li>
+          <li><strong>Open flame —</strong> not permitted per the Casa Duende Welcome Kit.</li>
+          <li><strong>Casa Manager coverage —</strong> Leroi Richardson on site 1:00 PM – 2:00 AM (13 hrs), per the confirmed booking.</li>
+          <li><strong>Headcount —</strong> 70 guests, per the confirmed booking record.</li>
+        </ul>
+      </div>
+      <div class="items-col">
+        <div class="items-group-head">Open Items to Confirm</div>
+        <div class="item-row">
+          <div class="item-status"><span class="pill pending">Pending</span></div>
+          <div class="item-text"><strong>Cartoonist timing —</strong> the client's PDF shows this at ~6:30 PM overlapping the band set; worth a quick confirm with Daniel.</div>
+        </div>
+        <div class="item-row">
+          <div class="item-status"><span class="pill pending">Pending</span></div>
+          <div class="item-text"><strong>Photographer window —</strong> confirm the 7:30–10:30 PM coverage window with Iyzi Lester directly.</div>
+        </div>
+        <div class="item-row">
+          <div class="item-status"><span class="pill pending">Pending</span></div>
+          <div class="item-text"><strong>Sound system test —</strong> confirm the client's phone/Spotify connects to the venue system ahead of 7:45 PM.</div>
+        </div>
+        <div class="item-row">
+          <div class="item-status"><span class="pill progress">In Progress</span></div>
+          <div class="item-text"><strong>COIs —</strong> confirm certificates of insurance are on file for every vendor on site (rentals, catering, band, DJ, photographer).</div>
+        </div>
+        <div class="item-row">
+          <div class="item-status"><span class="pill progress">In Progress</span></div>
+          <div class="item-text"><strong>Final balance —</strong> confirm outstanding invoice / payment is settled ahead of the event.</div>
+        </div>
+        <div class="item-row">
+          <div class="item-status"><span class="pill pending">Pending</span></div>
+          <div class="item-text"><strong>Rooftop cocktail tables —</strong> still confirming with the client whether these are needed on the roof.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="plan-footer">
+    <div class="plan-footer-left">Cocoon Flex Spaces · cocoonflexspaces.com</div>
+    <div class="plan-footer-center">Zeldovich–Souza · Casa Duende · Sept 5, 2026</div>
+    <div class="plan-footer-right">Draft V1 · Source: Ticket #58098</div>
+  </div>
+
+</div>
+</body>
+</html>
