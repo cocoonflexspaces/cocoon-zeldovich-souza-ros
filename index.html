@@ -103,6 +103,16 @@
   .legend-item { display: flex; align-items: center; gap: 6px; font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-soft); }
   .legend-swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
   .legend-swatch.cocoon { background: var(--terracotta); }
+
+  /* ── OT ALERT BANNER ─────────────────────────────────── */
+  .ot-alert {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    background: var(--terracotta); color: #fff;
+    padding: 12px 36px; text-align: center; flex-wrap: wrap;
+  }
+  .ot-alert-icon { font-size: 15px; line-height: 1; flex-shrink: 0; }
+  .ot-alert-text { font-size: 11.5px; font-weight: 700; letter-spacing: -0.005em; }
+  .ot-alert-text strong { font-size: 13.5px; text-decoration: underline; text-underline-offset: 2px; }
   .legend-swatch.vendor { background: var(--teal); }
 
   /* ── DAY / TIMELINE ───────────────────────────────────── */
@@ -233,6 +243,11 @@
     .cover-footer-note, .cover-footer-contact { font-size: 11px; }
     .legend-item { font-size: 11px; }
 
+    .ot-alert { padding: 12px 16px; gap: 8px; }
+    .ot-alert-icon { font-size: 17px; }
+    .ot-alert-text { font-size: 13px; }
+    .ot-alert-text strong { font-size: 15px; }
+
     .day-header { padding: 14px 16px; }
     .dh-title { font-size: 18px; }
     .dh-access-val { font-size: 13px; }
@@ -349,6 +364,11 @@
       </div>
     </div>
   </section>
+
+  <div class="ot-alert">
+    <span class="ot-alert-icon">⚠</span>
+    <span class="ot-alert-text">OVERTIME RATE: <strong>$1,447.50 / hour</strong> for any team on site past the 1:00 AM hard out — plus processing fees.</span>
+  </div>
 
   <div class="section-break"></div>
 
@@ -520,10 +540,10 @@
             <td class="rt-item">Teams wrap out / load out.</td>
             <td class="rt-owner">All</td>
           </tr>
-          <tr>
+          <tr class="row-highlight">
             <td class="rt-time">1:00 AM</td>
             <td class="rt-track"><span class="track-pill cocoon">Cocoon</span></td>
-            <td class="rt-item">Hard out — all teams out of venue.<span class="rt-note flag">OT is $1,447.50/hour for any team still on site past this time, plus processing fees.</span></td>
+            <td class="rt-item">Hard out — all teams out of venue.<span class="rt-note flag">⚠ OT is $1,447.50/hour for any team still on site past this time, plus processing fees.</span></td>
             <td class="rt-owner">Leroi Richardson</td>
           </tr>
           <tr>
